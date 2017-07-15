@@ -38,7 +38,6 @@ CQEVENT(int32_t, Initialize, 4)(int32_t AuthCode) {
 	return 0;
 }
 
-
 /*
 * Type=302 请求-群添加
 * subType 子类型，1/他人申请入群 2/自己(即登录号)受邀入群
@@ -52,7 +51,7 @@ CQEVENT(int32_t, __eventRequest_AddGroup, 32)(int32_t subType, int32_t sendTime,
 	} else if (subType == 2) {
 		CQ_setGroupAddRequestV2(ac, responseFlag, REQUEST_GROUPINVITE, REQUEST_DENY, "");
 	}
-
+	Robot::setGroupCard(fromGroup, fromQQ, string(string("!") + string(msg)).c_str());
 	return EVENT_IGNORE; //关于返回值说明, 见“_eventPrivateMsg”函数
 }
 
@@ -66,11 +65,11 @@ CQEVENT(int32_t, __eventSystem_GroupMemberIncrease, 32)(int32_t subType, int32_t
 	Robot::sendGroupMsg(fromGroup, Util::getWelComeMsg(fromGroup, beingOperateQQ));
 	
 	string record;
-	if (fromGroup == 513289848) {
-		Robot::setGroupCard(fromGroup, beingOperateQQ, "!16专业 真实姓名");
+	if (fromGroup == 639251585) {
+		//Robot::setGroupCard(fromGroup, beingOperateQQ, "!17地区 真实姓名");
 		record = CQCode::record("1.mp3", false);
 	} else {
-		Robot::setGroupCard(fromGroup, beingOperateQQ, "!16 地区 真实姓名");
+		//Robot::setGroupCard(fromGroup, beingOperateQQ, "!17 地区 真实姓名");
 		record = CQCode::record("2.mp3", false);
 	}
 	Robot::sendGroupMsg(fromGroup, record);
@@ -132,26 +131,26 @@ CQEVENT(int32_t, __eventDisable, 0)() {
 	return 0;
 }
 
-//
-///*
-//* Type=21 私聊消息
-//* subType 子类型，11/来自好友 1/来自在线状态 2/来自群 3/来自讨论组
-//*/
-//CQEVENT(int32_t, __eventPrivateMsg, 24)(int32_t subType, int32_t sendTime, int64_t fromQQ, const char *msg, int32_t font) {
-//	//如果要回复消息，请调用酷Q方法发送，并且这里 return EVENT_BLOCK - 截断本条消息，不再继续处理  注意：应用优先级设置为"最高"(10000)时，不得使用本返回值
-//	//如果不回复消息，交由之后的应用/过滤器处理，这里 return EVENT_IGNORE - 忽略本条消息
-//	//return EVENT_IGNORE;
-//	return robot.handleMsg(Message(subType, sendTime, fromQQ, msg, font));
-//}
-//
-///*
-//* Type=2 群消息
-//*/
-//CQEVENT(int32_t, __eventGroupMsg, 36)(int32_t subType, int32_t sendTime, int64_t fromGroup, int64_t fromQQ, const char *fromAnonymous, const char *msg, int32_t font) {
-//	//return EVENT_IGNORE; //关于返回值说明, 见“_eventPrivateMsg”函数
-//	return robot.handleMsg(Message(subType, sendTime, fromGroup, fromQQ, fromAnonymous, msg, font));
-//}
-//
+
+/*
+* Type=21 私聊消息
+* subType 子类型，11/来自好友 1/来自在线状态 2/来自群 3/来自讨论组
+*/
+CQEVENT(int32_t, __eventPrivateMsg, 24)(int32_t subType, int32_t sendTime, int64_t fromQQ, const char *msg, int32_t font) {
+	//如果要回复消息，请调用酷Q方法发送，并且这里 return EVENT_BLOCK - 截断本条消息，不再继续处理  注意：应用优先级设置为"最高"(10000)时，不得使用本返回值
+	//如果不回复消息，交由之后的应用/过滤器处理，这里 return EVENT_IGNORE - 忽略本条消息
+	//return EVENT_IGNORE;
+	return robot.handleMsg(Message(subType, sendTime, fromQQ, msg, font));
+}
+
+/*
+* type=2 群消息
+*/
+CQEVENT(int32_t, __eventGroupMsg, 36)(int32_t subType, int32_t sendTime, int64_t fromGroup, int64_t fromQQ, const char *fromAnonymous, const char *msg, int32_t font) {
+	//return EVENT_IGNORE; //关于返回值说明, 见“_eventPrivateMsg”函数
+	return robot.handleMsg(Message(subType, sendTime, fromGroup, fromQQ, fromAnonymous, msg, font));
+}
+
 
 /*
 * Type=301 请求-好友添加

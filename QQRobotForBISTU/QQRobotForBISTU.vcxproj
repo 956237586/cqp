@@ -85,8 +85,8 @@
     </Link>
     <PostBuildEvent>
       <Command>mkdir "..\outputFiles"
-copy ".\Release\cn.hylstudio.robot.dll" "..\outputFiles"
-copy ".\cn.hylstudio.robot.json" "..\outputFiles"
+copy ".\Release\*.dll" "..\outputFiles"
+copy ".\*.json" "..\outputFiles"
 .\SetupPath.bat</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

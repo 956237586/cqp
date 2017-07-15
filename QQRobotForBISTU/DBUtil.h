@@ -4,30 +4,43 @@
 #include <mysql_connection.h>
 #include <driver.h>
 #include <statement.h>
-
+#include <prepared_statement.h>
 #include <resultset.h>
+#include <stdexcept>
+#include <exception>
+#include <list>
 class DBUtil {
 private:
+	int flag;
 	string url;
 	string username;
 	string password;
+	int maxSize;
+	static list<sql::Connection *> connList;
 	sql::Driver *driver;
-	sql::Connection *conn;
 	void example();
 public:
-	//连接数据库
-	sql::Connection* getConnection(string url, string username, string password);
-	//判断当前是否连接成功
-	bool isConnected();
-	//切换数据库
-	void use(string dbName);
-	//关闭数据库
-	void close();
+	//获取链接
+	sql::Connection* getConnection();
 	//执行查询sql
+	sql::Statement* createStatement();
+	sql::PreparedStatement* prepareStatement(string sql);
+	bool execute(string sql);
 	sql::ResultSet* executeQuery(string sql);
-
+	int executeUpdate(string sql);
 	DBUtil();
 	~DBUtil();
+
+
+	//初始化连接池，创建最大连接数的一半连接数量
+	void initConnections();
+	//创建连接,返回一个Connection
+	sql::Connection* createConnection();
+	//回收数据库连接
+	void releaseConnection(sql::Connection * conn);
+	//销毁一个连接
+	void destoryConnection(sql::Connection* conn);
+	void refreshConnections();
 };
 
 #endif

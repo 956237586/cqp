@@ -196,3 +196,5 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+outputFiles/cn.hylstudio.robot.dll
+outputFiles/cn.hylstudio.robot.json

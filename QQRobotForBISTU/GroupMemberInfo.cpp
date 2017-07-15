@@ -89,3 +89,15 @@ void GroupMemberInfo::parseCardChangeble() {
 		cardChangeble = false;
 	}
 }
+/*
+GroupMemberInfo info;
+string infoString(Robot::getGroupMemberInfo(20103153, 294269440, true));
+info.parse(infoString);
+Robot::sendToMaster(infoString);
+char* ret = new char[50];
+sprintf(ret, "%d", info.groupCard);
+Robot::sendToMaster(info.groupCard);
+
+delete ret;
+
+*/

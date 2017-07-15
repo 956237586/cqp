@@ -2,6 +2,7 @@
 #define QQROBOT_UTIL_H
 #include "public.h"
 #include "DBUtil.h"
+
 class Util {
 private:
 	static inline bool iSbase64(unsigned char c);

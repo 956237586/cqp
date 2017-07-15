@@ -50,3 +50,16 @@ public:
 	static string shareUrl(string url, string fileName);
 };
 #endif
+/*
+	Example
+		string str=CQCode::at(29426440);
+		创建一个at294269440的CQCode；
+		stirng str=CQCode::face(CQCode::FACETYPE_COMMON,140);
+		创建一个发表情140号的CQCode(其中FACETYPE_COMMON有其他类型如emoji);
+		string str=CQCode::image("1.jpg");
+		创建一个发送图片1.jpg的CQCode(图片放在data\image);
+		string str=CQCode::record("1.silk",true);
+		创建一个发送语音1.silk的CQCode,后面参数仅仅是为了让外观实现变声效果(并没有变声,文件放在data/record)
+		string str=CQCode::shareUrl("https//www.baidu.com","1111");
+		分享一个链接分享原因为111;
+*/
