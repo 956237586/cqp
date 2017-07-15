@@ -38,11 +38,7 @@ int32_t GroupMsgHandler::handle(Message& m) {
 		//Robot::sendGroupMsg(m.fromGroup, Util::getWelComeMsg());
 		//Robot::addLog(CQLOG_INFOSEND, "test", str);
 	string content(m.content);
-	if (regex_match(content, pattern)) {
-		Signed s;
-		s.sign(m);
-		reply = true;
-	} else if (!content.compare("我的金币")) {
+	if (!content.compare("我的金币")) {
 		//DBUtil db;
 		string rep = CQCode::at(m.fromQQ);
 		int score;
@@ -55,7 +51,11 @@ int32_t GroupMsgHandler::handle(Message& m) {
 			rep += "QAQ你从未签到过，查询失败\n请发送“签到”吧~我会记住你的~";
 		}
 		Robot::sendGroupMsg(m.fromGroup, rep);
-	} /*else if (!content.compare("金币排名")){
+	} else if (regex_match(content, pattern)) {
+		Signed s;
+		s.sign(m);
+		reply = true;
+	}/*else if (!content.compare("金币排名")){
 		GroupMemberInfo info;
 		Robot::addLog(CQLOG_DEBUG, "rank", "0");
 		info.parse(Robot::getGroupMemberInfo(m.fromGroup, m.fromQQ, true));
@@ -79,7 +79,7 @@ int32_t GroupMsgHandler::handle(Message& m) {
 			Robot::sendGroupMsg(m.fromGroup, rep);
 		}
 	}*/ else if (!content.substr(0, string("金币").size()).compare("金币")) {
-		if (m.isFromMaster()||m.fromQQ== 785631998 ||m.fromQQ==78757296) {
+		if (m.isFromMaster()) {
 			char buff[60];
 			QQ qq = 956237586;
 			int score;
@@ -105,6 +105,51 @@ int32_t GroupMsgHandler::handle(Message& m) {
 				} else {
 					Robot::sendGroupMsg(m.fromGroup, "QAQ这个人不存在，请让TA发送“签到”，我会记住TA的~");
 				}
+			}
+		}
+	} else if (!content.substr(0, string("转账").size()).compare("转账")) {
+		char buff[60];
+		QQ qq = 956237586;
+		int score = 0;
+		int score1 = 0;
+		int addScore = 0;
+		Robot::addLog(CQLOG_DEBUG, "add score", content.c_str());
+		//转账[CQ:at,qq=785631998] 1000
+		sscanf(content.substr(4, content.size() - 4).c_str(), "[CQ:at,qq=%d] %d", &qq, &addScore);
+		sprintf(buff, "qq = %u", qq & 0xFFFFFFFF);
+		Robot::addLog(CQLOG_DEBUG, "add score", buff);
+		sprintf(buff, "score = %d", addScore);
+		Robot::addLog(CQLOG_DEBUG, "add score", buff);
+		//DBUtil db;
+		if (addScore > 500) {
+			if (Util::getScore(db, qq, score) && 
+				Util::getScore(db, m.fromQQ, score1)) {
+				if (score1 > 0 && addScore <= score1) {
+					string rep = "转账成功~\n";
+					rep += CQCode::at(qq);
+					string sql = "UPDATE `db_users`.`t_users` SET `score` = score + ? WHERE `qq` = ?;";
+					sql::PreparedStatement *stmt = db.prepareStatement(sql);
+					stmt->setInt(1, addScore);
+					stmt->setInt(2, qq);
+					stmt->execute();
+
+					sql = "UPDATE `db_users`.`t_users` SET `score` = score - ? WHERE `qq` = ?;";
+					delete stmt;
+					stmt = db.prepareStatement(sql);
+					stmt->setInt(1, addScore);
+					stmt->setInt(2, m.fromQQ);
+					stmt->execute();
+					delete stmt;
+
+					sprintf(buff, "当前余额：%d\n", score + addScore);
+					rep += string(buff);
+					rep += CQCode::at(m.fromQQ);
+					sprintf(buff, "当前余额：%d", score1 - addScore);
+					rep += string(buff);
+					Robot::sendGroupMsg(m.fromGroup, rep);
+				}
+			} else {
+				Robot::sendGroupMsg(m.fromGroup, "QAQ两人中有一个不存在，请让TA发送“签到”，我会记住TA的~");
 			}
 		}
 	} else {

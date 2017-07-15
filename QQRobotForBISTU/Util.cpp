@@ -106,7 +106,7 @@ string Util::encode(unsigned char const *bytesToBeEncode, unsigned int len) {
 string Util::getWelComeMsg() {
 	string welCome;
 	welCome += "[CQ:face,id=137]欢迎加入本群。\n"
-		"[CQ:face,id=137]请自行删掉叹号，按格式(16 地区 真实姓名)修改名片~~\n"
+		"[CQ:face,id=137]请自行删掉叹号，按格式(17 地区 真实姓名)修改名片~~\n"
 		"[CQ:face,id=137]请仔细阅读群须知&群公告后再来提问QAQ。。。\n"
 		"[CQ:face,id=137]群文件和相册也有一些资料可以参考~\n"
 		"ps：严禁调戏小冰！违者小冰会很严肃的处理你哦~！";
