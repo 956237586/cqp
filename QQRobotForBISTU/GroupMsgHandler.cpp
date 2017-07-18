@@ -8,9 +8,9 @@
 #include "GroupMemberInfo.h"
 #include <regex>
 #include <map>
-regex GroupMsgHandler::patternCard1("^(计类|软工|网工|计科)[0-9]{4} .{2,30}", regex_constants::extended);
-regex GroupMsgHandler::patternCard2("^[01][0-9][^ ].{1,7} .{2,30}", regex_constants::extended);
-regex GroupMsgHandler::patternCard3("^[01][0-9] [^ ].{1,7} .{2,30}", regex_constants::extended);
+regex GroupMsgHandler::patternCard1("^(计类|软工|网工|计科)[0-9]{4} [^ ].{2,30}", regex_constants::extended);
+regex GroupMsgHandler::patternCard2("^[01][0-9][^ ].{1,7} [^ ].{2,30}", regex_constants::extended);
+regex GroupMsgHandler::patternCard3("^[01][0-9] [^ ].{1,7} [^ ].{2,30}", regex_constants::extended);
 DBUtil GroupMsgHandler::db;
 GroupMsgHandler::GroupMsgHandler() {
 }
