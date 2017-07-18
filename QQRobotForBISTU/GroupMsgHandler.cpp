@@ -59,6 +59,7 @@ int32_t GroupMsgHandler::handle(Message& m) {
 			stmt->setInt(2, m.fromGroup);
 			stmt->setInt(3, 0);
 			stmt->execute();
+			delete stmt;
 		} else {
 			rs->next();
 			int count = rs->getInt(1);
@@ -66,6 +67,8 @@ int32_t GroupMsgHandler::handle(Message& m) {
 				needCheck = true;
 			}
 		}
+		delete rs;
+		delete stmt;
 		if (needCheck) {
 			GroupMemberInfo info(Robot::getGroupMemberInfo(m.fromGroup, m.fromQQ, true));
 			Robot::addLog(CQLOG_DEBUG, "名片校验", info.groupCard);
@@ -89,6 +92,7 @@ int32_t GroupMsgHandler::handle(Message& m) {
 				stmt->setInt(1, m.fromQQ);
 				stmt->setInt(2, m.fromGroup);
 				stmt->execute();
+				delete stmt;
 				sprintf(log, "名片校验通过！qq=%u", m.fromQQ & 0xFFFFFFFF);
 				Robot::addLog(CQLOG_DEBUG, "名片校验", log);
 			}
@@ -98,6 +102,7 @@ int32_t GroupMsgHandler::handle(Message& m) {
 			stmt->setInt(1, m.fromQQ);
 			stmt->setInt(2, m.fromGroup);
 			stmt->execute();
+			delete stmt;
 		}
 
 	}
