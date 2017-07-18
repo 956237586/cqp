@@ -100,6 +100,7 @@ int32_t GroupMsgHandler::handle(Message& m) {
 					stmt->setInt(1, addScore);
 					stmt->setInt(2, qq);
 					stmt->execute();
+					delete stmt;
 					sprintf(buff, "充值成功~~当前余额：%d", score + addScore);
 					Robot::sendGroupMsg(m.fromGroup, rep + string(buff));
 				} else {
@@ -184,6 +185,7 @@ int32_t GroupMsgHandler::handle(Message& m) {
 				stmt->setInt(1, addScore);
 				stmt->setInt(2, m.fromQQ);
 				stmt->execute();
+				delete stmt;
 				char buff[60];
 				sprintf(buff, "你是第%d句发言的\n奖励金币%d~~,计数清零~\n当前余额：%d",
 					nextInt[m.fromGroup], addScore, score + addScore);
